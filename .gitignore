@@ -1,0 +1,24 @@
+# Build directory
+/build/
+build/
+
+# CMake generated files
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+*.cmake
+
+# Executables and binaries
+*.o
+*.obj
+*.out
+*.a
+*.so
+
+# OS junk files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log

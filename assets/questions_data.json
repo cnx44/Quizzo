@@ -1,0 +1,182 @@
+[
+	{
+		"question": "What is the time complexity of binary search?",
+		"answer": "O(log n)",
+		"miss_rate": 42,
+		"category": 0x0101
+	},
+	{
+		"question": "Who proposed the Turing machine model?",
+		"answer": "Alan Turing",
+		"miss_rate": 12,
+		"category": 0x0201
+	},
+	{
+		"question": "What is the capital of Japan?",
+		"answer": "Tokyo",
+		"miss_rate": 5,
+		"category": 0x0003
+	},
+	{
+		"question": "What does HTTP stand for?",
+		"answer": "HyperText Transfer Protocol",
+		"miss_rate": 130,
+		"category": 0x0104
+	},
+	{
+		"question": "What is the result of 2 + 2 * 2?",
+		"answer": "6",
+		"miss_rate": 78,
+		"category": 0x0402
+	},
+	{
+		"question": "In which year was the C programming language created?",
+		"answer": "1972",
+		"miss_rate": 200,
+		"category": 0x0802
+	},
+	{
+		"question": "What is the speed of light in vacuum?",
+		"answer": "299792458 m/s",
+		"miss_rate": 32,
+		"category": 0x0004
+	},
+	{
+		"question": "Which protocol is used to send emails?",
+		"answer": "SMTP",
+		"miss_rate": 58,
+		"category": 0x0106
+	},
+	{
+		"question": "What does CPU stand for?",
+		"answer": "Central Processing Unit",
+		"miss_rate": 19,
+		"category": 0x0204
+	},
+	{
+		"question": "Which data structure uses FIFO?",
+		"answer": "Queue",
+		"miss_rate": 64,
+		"category": 0x0102
+	},
+	{
+		"question": "Which data structure uses LIFO?",
+		"answer": "Stack",
+		"miss_rate": 44,
+		"category": 0x0102
+	},
+	{
+		"question": "What is the largest planet in the Solar System?",
+		"answer": "Jupiter",
+		"miss_rate": 22,
+		"category": 0x0003
+	},
+	{
+		"question": "What is the symbol for gold?",
+		"answer": "Au",
+		"miss_rate": 51,
+		"category": 0x0005
+	},
+	{
+		"question": "Which gas is essential for respiration?",
+		"answer": "Oxygen",
+		"miss_rate": 3,
+		"category": 0x0005
+	},
+	{
+		"question": "What does SQL stand for?",
+		"answer": "Structured Query Language",
+		"miss_rate": 73,
+		"category": 0x0302
+	},
+	{
+		"question": "What is the default port for HTTPS?",
+		"answer": "443",
+		"miss_rate": 155,
+		"category": 0x0104
+	},
+	{
+		"question": "What is 1 byte equal to?",
+		"answer": "8 bits",
+		"miss_rate": 11,
+		"category": 0x0204
+	},
+	{
+		"question": "Who wrote 'The Art of Computer Programming'?",
+		"answer": "Donald Knuth",
+		"miss_rate": 97,
+		"category": 0x0201
+	},
+	{
+		"question": "What is the result of TRUE AND FALSE?",
+		"answer": "FALSE",
+		"miss_rate": 29,
+		"category": 0x0107
+	},
+	{
+		"question": "What is the result of TRUE OR FALSE?",
+		"answer": "TRUE",
+		"miss_rate": 24,
+		"category": 0x0107
+	},
+	{
+		"question": "In networking, what does DNS do?",
+		"answer": "Resolves domain names to IP addresses",
+		"miss_rate": 88,
+		"category": 0x0104
+	},
+	{
+		"question": "Which language is mainly used for Android development?",
+		"answer": "Kotlin",
+		"miss_rate": 133,
+		"category": 0x0203
+	},
+	{
+		"question": "What is 5! (factorial)?",
+		"answer": "120",
+		"miss_rate": 36,
+		"category": 0x0402
+	},
+	{
+		"question": "What is the ASCII value of character 'A'?",
+		"answer": "65",
+		"miss_rate": 91,
+		"category": 0x0204
+	},
+	{
+		"question": "What is encapsulation in OOP?",
+		"answer": "Hiding internal details and exposing only functionality",
+		"miss_rate": 142,
+		"category": 0x0203
+	},
+	{
+		"question": "Which sorting algorithm is O(n^2) in average case?",
+		"answer": "Bubble sort",
+		"miss_rate": 67,
+		"category": 0x0102
+	},
+	{
+		"question": "What protocol secures HTTP?",
+		"answer": "TLS",
+		"miss_rate": 111,
+		"category": 0x0104
+	},
+	{
+		"question": "How many bits are in an IPv4 address?",
+		"answer": "32",
+		"miss_rate": 160,
+		"category": 0x0104
+	},
+	{
+		"question": "Which component executes program instructions?",
+		"answer": "CPU",
+		"miss_rate": 6,
+		"category": 0x0204
+	},
+	{
+		"question": "What is the name of the network layer packet in TCP/IP?",
+		"answer": "IP packet",
+		"miss_rate": 148,
+		"category": 0x0104
+	}
+]
