@@ -1,6 +1,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <cjson/cJSON.h>
 
 #define QUESTIONS_ARRAY_SIZE 128
 
@@ -30,6 +31,18 @@ heap_t* heap_t_creator(void){
 }
 
 int main (int argc, char** args){
+	FILE *json_ptr = fopen(args[1], "r");
+	if(!json_ptr){
+		fprintf(stderr, "Error while opening question file\n");
+		exit(EXIT_FAILURE);
+	}
+
+	char buffer[2048];
+	size_t readed_bytes = fread(buffer, 1, sizeof(buffer), json_ptr);
+	fclose(json_ptr);
+	
+	printf("%s\n", buffer);
+
 	heap_t *questions_heap = heap_t_creator();
 	if(questions_heap == NULL){
 		printf("Couldn't allocate memory for questions\n");
