@@ -1,6 +1,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include <cjson/cJSON.h>
 #include <sys/stat.h>
 
@@ -23,12 +24,39 @@ typedef struct heap_struct{
 // i could also consider of providing a pointer for questions alredy allocated and populated and then 
 // call a heapify inside here so that after calling heap_t_creator i won't have to do any more operations
 // so obtaining the same semantic use in OOP
-heap_t* heap_t_creator(void){
+heap_t* heap_t_creator(question_t* questions, size_t size){
 	heap_t *new_heap		= (heap_t*) malloc(sizeof(heap_t));
-	new_heap -> questions	= malloc(QUESTIONS_ARRAY_SIZE * sizeof(question_t));
-	new_heap -> size		= QUESTIONS_ARRAY_SIZE;
+	new_heap -> questions	= questions;
+	new_heap -> size		= size;
 	if(!new_heap || !new_heap->questions) return NULL;
 	return new_heap;
+}
+
+question_t* question_array_allocator(cJSON* question_json, size_t size){
+	question_t *questions = malloc(sizeof(question_t) * size);
+	if(!questions) return NULL;		
+
+	for(int i = 0; i < size; i++){
+		cJSON *entry = cJSON_GetArrayItem(question_json, i);
+
+		cJSON *qst = cJSON_GetObjectItem(entry, "question");
+		cJSON *ans = cJSON_GetObjectItem(entry, "answer");
+		cJSON *msr = cJSON_GetObjectItem(entry, "miss_rate");
+
+		questions[i].question = malloc(strlen(qst->valuestring) + 1);
+		questions[i].answer = malloc(strlen(ans->valuestring) + 1);
+		//TODO: handle malloc fail
+		
+		strcpy(questions[i].question, qst->valuestring);
+		strcpy(questions[i].answer, ans->valuestring);
+		questions[i].miss_rate = msr->valueint;
+		//TODO: conver 0x???? into uint16_t
+
+		printf("%d\n", questions[i].miss_rate);
+	}
+
+
+	return questions ;
 }
 
 // Takes a file pointer as input and returns a heap-allocated character buffer
@@ -80,22 +108,15 @@ int main (int argc, char** args){
 
 
 	int questions_number = cJSON_GetArraySize(question_json);
-	question_t *questions = malloc(questions_number * sizeof(question_t));
+	question_t *questions = question_array_allocator(question_json, questions_number);
 	if(!questions){
 		fprintf(stderr, "Error while creating question_t array\n");
 		exit(EXIT_FAILURE);
 	}
 
-	for(int i = 0; i < questions_number; i++){
-		cJSON *entry = cJSON_GetArrayItem(question_json, i);
-		printf("%s\n", cJSON_Print(entry));
-	}
-
-	/*
-	heap_t *questions_heap = heap_t_creator();
+	heap_t *questions_heap = heap_t_creator(questions, (size_t)questions_number);
 	if(questions_heap == NULL){
 		printf("Couldn't allocate memory for questions\n");
 	}
-	*/
 	return 0;
 }
