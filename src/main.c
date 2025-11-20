@@ -42,6 +42,7 @@ question_t* question_array_allocator(cJSON* question_json, size_t size){
 		cJSON *qst = cJSON_GetObjectItem(entry, "question");
 		cJSON *ans = cJSON_GetObjectItem(entry, "answer");
 		cJSON *msr = cJSON_GetObjectItem(entry, "miss_rate");
+		cJSON *cat = cJSON_GetObjectItem(entry, "category");
 
 		questions[i].question = malloc(strlen(qst->valuestring) + 1);
 		questions[i].answer = malloc(strlen(ans->valuestring) + 1);
@@ -50,9 +51,10 @@ question_t* question_array_allocator(cJSON* question_json, size_t size){
 		strcpy(questions[i].question, qst->valuestring);
 		strcpy(questions[i].answer, ans->valuestring);
 		questions[i].miss_rate = msr->valueint;
-		//TODO: conver 0x???? into uint16_t
+		// could use endptr to enfore more safety on the cast lengt
+		questions[i].category = (uint16_t) strtol(cat->valuestring, NULL, 16);
 
-		printf("%d\n", questions[i].miss_rate);
+		printf("%d\n", questions[i].category);
 	}
 
 
