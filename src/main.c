@@ -6,8 +6,6 @@
 #include <cjson/cJSON.h>
 #include <sys/stat.h>
 
-#define QUESTIONS_ARRAY_SIZE 128
-
 typedef struct question_stuct{
 	char		*question;
 	char		*answer;
@@ -33,18 +31,32 @@ heap_t* heap_t_creator(question_t* questions, size_t size){
 	return new_heap;
 }
 
+
+void heap_t_dealloc(heap_t* heap){
+	for(int i=0; i<heap->size; i++){
+		free(heap->questions[i].question);
+		free(heap->questions[i].answer);
+	}
+	free(heap->questions);
+	free(heap);
+}
+
 // returns 0 if str is not hexadecimal of chars number == 6, 2 for 0x, 4 for value
 int str_is_4dig_hex(char *str){
 	const char *pattern = "^0[xX][0-9A-Fa-f]{4}$";
 	regex_t regex;
 	int ret = regcomp(&regex, pattern, REG_EXTENDED);
-	if(ret != 0) return 0;	
+	if(ret != 0){
+		regfree(&regex);
+		return 0;
+	}	
 
 	ret = regexec(&regex, str, 0, NULL, 0);
+	regfree(&regex);
 	return 1-ret;
 }
 
-// Not so difficult, just takes a pointer for a cJSON entity and a size_t
+// Takes a pointer for a cJSON entity and a size_t
 // and returns a pointer of a question_t array, strings are copied via strcpy
 // base 16 values are caster via strtol. 
 question_t* question_array_allocator(cJSON* question_json, size_t size){
@@ -129,13 +141,19 @@ int main (int argc, char** args){
 	int questions_number = cJSON_GetArraySize(question_json);
 	question_t *questions = question_array_allocator(question_json, questions_number);
 	if(!questions){
+		cJSON_Delete(question_json);
 		fprintf(stderr, "Error while creating question_t array\n");
 		exit(EXIT_FAILURE);
 	}
+	cJSON_Delete(question_json);
 
 	heap_t *questions_heap = heap_t_creator(questions, (size_t)questions_number);
 	if(questions_heap == NULL){
+		heap_t_dealloc(questions_heap);
 		printf("Couldn't allocate memory for questions\n");
 	}
+
+
+	heap_t_dealloc(questions_heap);
 	return 0;
 }
