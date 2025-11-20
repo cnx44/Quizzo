@@ -46,19 +46,23 @@ int str_is_4dig_hex(char *str){
 
 // Not so difficult, just takes a pointer for a cJSON entity and a size_t
 // and returns a pointer of a question_t array, strings are copied via strcpy
-// base 16 values are caster via strtol. This could use some regex sugar
-// to enfore 0x[hex_digit](4)
+// base 16 values are caster via strtol. 
+// TODO: need to handle not correct JSON which rn leads to SEGFAULT
 question_t* question_array_allocator(cJSON* question_json, size_t size){
 	question_t *questions = malloc(sizeof(question_t) * size);
-	if(!questions) return NULL;		
+	if(!questions || !cJSON_IsArray(question_json)) return NULL;		
 
 	for(int i = 0; i < size; i++){
 		cJSON *entry = cJSON_GetArrayItem(question_json, i);
+		if(!cJSON_IsObject(entry)) return NULL;
 
 		cJSON *qst = cJSON_GetObjectItem(entry, "question");
 		cJSON *ans = cJSON_GetObjectItem(entry, "answer");
 		cJSON *msr = cJSON_GetObjectItem(entry, "miss_rate");
 		cJSON *cat = cJSON_GetObjectItem(entry, "category");
+		if(!qst || !ans || !msr || !cat) return NULL;
+		if(!cJSON_IsString(qst) || !cJSON_IsString(ans) || 
+				!cJSON_IsNumber(msr) || !cJSON_IsString(cat)) return NULL;
 
 		questions[i].question = malloc(strlen(qst->valuestring) + 1);
 		questions[i].answer = malloc(strlen(ans->valuestring) + 1);
