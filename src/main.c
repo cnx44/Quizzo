@@ -47,7 +47,6 @@ int str_is_4dig_hex(char *str){
 // Not so difficult, just takes a pointer for a cJSON entity and a size_t
 // and returns a pointer of a question_t array, strings are copied via strcpy
 // base 16 values are caster via strtol. 
-// TODO: need to handle not correct JSON which rn leads to SEGFAULT
 question_t* question_array_allocator(cJSON* question_json, size_t size){
 	question_t *questions = malloc(sizeof(question_t) * size);
 	if(!questions || !cJSON_IsArray(question_json)) return NULL;		
