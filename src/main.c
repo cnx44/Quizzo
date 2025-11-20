@@ -14,23 +14,22 @@ typedef struct question_stuct{
 								// 64 Arguments, 64 Paragraphs, 16 Topics
 } question_t;
 
+// heap_t entities should be allocated and deallocated with the respective 
+// functions, to ensure heap_t consistency with the alloc/dealloc functions, size must always
+// represent the size of of question_t array.
 typedef struct heap_struct{
 	question_t	*questions;
 	uint32_t	size;			//Heap elements number
 	
 } heap_t;
 
-// i could also consider of providing a pointer for questions alredy allocated and populated and then 
-// call a heapify inside here so that after calling heap_t_creator i won't have to do any more operations
-// so obtaining the same semantic use in OOP
-heap_t* heap_t_creator(question_t* questions, size_t size){
+heap_t* heap_t_alloc(question_t* questions, size_t size){
 	heap_t *new_heap		= (heap_t*) malloc(sizeof(heap_t));
 	new_heap -> questions	= questions;
 	new_heap -> size		= size;
 	if(!new_heap || !new_heap->questions) return NULL;
 	return new_heap;
 }
-
 
 void heap_t_dealloc(heap_t* heap){
 	for(int i=0; i<heap->size; i++){
@@ -147,7 +146,7 @@ int main (int argc, char** args){
 	}
 	cJSON_Delete(question_json);
 
-	heap_t *questions_heap = heap_t_creator(questions, (size_t)questions_number);
+	heap_t *questions_heap = heap_t_alloc(questions, (size_t)questions_number);
 	if(questions_heap == NULL){
 		heap_t_dealloc(questions_heap);
 		printf("Couldn't allocate memory for questions\n");
