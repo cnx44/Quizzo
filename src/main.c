@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <regex.h>
 #include <cjson/cJSON.h>
 #include <sys/stat.h>
 
@@ -32,6 +33,21 @@ heap_t* heap_t_creator(question_t* questions, size_t size){
 	return new_heap;
 }
 
+// returns 0 if str is not hexadecimal of chars number == 6, 2 for 0x, 4 for value
+int str_is_4dig_hex(char *str){
+	const char *pattern = "^0[xX][0-9A-Fa-f]{4}$";
+	regex_t regex;
+	int ret = regcomp(&regex, pattern, REG_EXTENDED);
+	if(ret != 0) return 0;	
+
+	ret = regexec(&regex, str, 0, NULL, 0);
+	return 1-ret;
+}
+
+// Not so difficult, just takes a pointer for a cJSON entity and a size_t
+// and returns a pointer of a question_t array, strings are copied via strcpy
+// base 16 values are caster via strtol. This could use some regex sugar
+// to enfore 0x[hex_digit](4)
 question_t* question_array_allocator(cJSON* question_json, size_t size){
 	question_t *questions = malloc(sizeof(question_t) * size);
 	if(!questions) return NULL;		
@@ -46,15 +62,13 @@ question_t* question_array_allocator(cJSON* question_json, size_t size){
 
 		questions[i].question = malloc(strlen(qst->valuestring) + 1);
 		questions[i].answer = malloc(strlen(ans->valuestring) + 1);
-		//TODO: handle malloc fail
-		
+		if(!questions[i].question || !questions[i].answer || !str_is_4dig_hex(cat->valuestring)) 
+			return NULL;	
+
 		strcpy(questions[i].question, qst->valuestring);
 		strcpy(questions[i].answer, ans->valuestring);
 		questions[i].miss_rate = msr->valueint;
-		// could use endptr to enfore more safety on the cast lengt
-		questions[i].category = (uint16_t) strtol(cat->valuestring, NULL, 16);
-
-		printf("%d\n", questions[i].category);
+		questions[i].category = (uint16_t) strtol(cat->valuestring, NULL, 16); // could use endptr to enfore more safety on the cast lengt
 	}
 
 
