@@ -42,6 +42,8 @@ void heap_t_swap(question_t *questions, int idx1, int idx2){
 	questions[idx2] = tmp;
 }
 
+// Im not sure if this is the proper way to avoid using stack while dealing with
+// Tail Recursion Elimination, a goto could do the work, maybe it would be more readable
 void heap_t_heapify(heap_t *heap, int idx){
 	question_t *questions = heap->questions;
 	uint32_t size = heap->size;
