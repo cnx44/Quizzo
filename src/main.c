@@ -6,6 +6,10 @@
 #include <cjson/cJSON.h>
 #include <sys/stat.h>
 
+#define PARENT(index) (i == 1)						? -1			: index / 2 
+#define   LEFT(size, index) (2 * index + 1 < size)	? 2 * index	+ 1 : -1
+#define  RIGHT(size, index) (2 * index + 2 < size)	? 2 * index + 2 : -1
+
 typedef struct question_stuct{
 	char		*question;
 	char		*answer;
@@ -23,12 +27,46 @@ typedef struct heap_struct{
 	
 } heap_t;
 
+
 heap_t* heap_t_alloc(question_t* questions, size_t size){
 	heap_t *new_heap		= (heap_t*) malloc(sizeof(heap_t));
 	new_heap -> questions	= questions;
 	new_heap -> size		= size;
 	if(!new_heap || !new_heap->questions) return NULL;
 	return new_heap;
+}
+
+void heap_t_swap(question_t *questions, int idx1, int idx2){
+	question_t tmp  = questions[idx1];
+	questions[idx1] = questions[idx2];
+	questions[idx2] = tmp;
+}
+
+void heap_t_heapify(heap_t *heap, int idx){
+	question_t *questions = heap->questions;
+	uint32_t size = heap->size;
+
+	int biggest;
+	while(1){ 
+		int left	= LEFT (size, (uint32_t)idx);
+		int right	= RIGHT(size, (uint32_t)idx);
+		biggest		= -1;
+
+		if(left != -1 && questions[left].miss_rate > questions[idx].miss_rate) 
+			biggest = left;
+		else 
+			biggest = idx;
+
+		if(right != -1 && questions[right].miss_rate > questions[biggest].miss_rate) 
+			biggest = right;
+
+		if (biggest != idx){
+			heap_t_swap(questions, idx, biggest);
+			idx = biggest;
+		} else {
+			break;
+		}
+	}
 }
 
 void heap_t_dealloc(heap_t* heap){
@@ -147,11 +185,15 @@ int main (int argc, char** args){
 	cJSON_Delete(question_json);
 
 	heap_t *questions_heap = heap_t_alloc(questions, (size_t)questions_number);
+	for(int i = (questions_heap->size / 2) - 1; i>=0; i--){
+		heap_t_heapify (questions_heap, i);
+	}
+	for(int i = 0; i < questions_heap->size; i++) printf("%u ", questions_heap->questions[i].miss_rate);
+	printf("\n");
 	if(questions_heap == NULL){
 		heap_t_dealloc(questions_heap);
 		printf("Couldn't allocate memory for questions\n");
 	}
-
 
 	heap_t_dealloc(questions_heap);
 	return 0;
